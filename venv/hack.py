@@ -233,6 +233,12 @@ class TerminalGame:
             self.highlightable_indices.append(self.selection_index)
             return self.selectable_text[self.selection_index]
 
+    def remove_word(self, index):
+
+        self.word_start_locations.remove(index)
+        for idx in range(self.word_length):
+            self.selectable_text[index+idx] = '.'
+
     def test_selection(self):
 
         self.likeness = 0
@@ -257,10 +263,8 @@ class TerminalGame:
             # Randomly remove a dud word or reset attempts
             self.bonus_indices.append(self.highlightable_indices[0])
             if random.randint(0, 100) > 20:
-                self.dud = random.choice(self.word_start_locations)
-                self.word_start_locations.remove(self.dud)
-                for idx in range(self.word_length):
-                    self.selectable_text[self.dud+idx] = '.'
+                dud = random.choice(self.word_start_locations)
+                self.remove_word(dud)
                 sfx_dud.play()
                 return 'Dud Removed.'
             else:
@@ -276,6 +280,7 @@ class TerminalGame:
         if self.entry_denied:
             sfx_bad.play()
             if self.attempts > 1:
+                self.remove_word(self.highlightable_indices[0])
                 self.attempts = self.attempts - 1
                 return 'Entry denied.'
             else:
@@ -319,6 +324,7 @@ class TerminalGame:
                         self.scroll_side_text(self.word_to_print)
                         self.scroll_side_text(self.terminal_status)
                         self.scroll_side_text('Likeness='+str(self.likeness))
+                        self.word_to_print = ''
                     elif self.terminal_status == 'TERMINAL LOCKED' or \
                             self.terminal_status == 'Password Accepted.':
                         stdscr.nodelay(True)
