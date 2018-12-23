@@ -3,7 +3,7 @@
 import random
 
 
-with open('google-10000-english-usa-no-swears.txt', 'r') as file:
+with open('trimmed-words.txt', 'r') as file:
 
     raw_text = file.readlines()
     clean_text = ['secretsecretwords'] # Add one 17 character string to this set :)
