@@ -34,8 +34,9 @@ def arrange_words_by_length(unsorted_text):
 
         # Figure out the number of words in each group
         # This dict is naturally ordered, so this works ok through word length of 16
-        for group in range(1, len(word_groups)-1):
-            word_groups[group][1] = word_groups[group+1][0] - word_groups[group][0]
+        for group in word_groups.keys():
+            if (group + 1) in word_groups.keys():
+                word_groups[group][1] = word_groups[group+1][0] - word_groups[group][0]
 """
     for key in word_groups:
         print('Words of length {0}, '
