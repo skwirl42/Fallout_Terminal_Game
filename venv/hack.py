@@ -7,11 +7,20 @@ import locale
 import random
 import string
 import simpleaudio
+import os
 
-sfx_good = simpleaudio.WaveObject.from_wave_file('passgood.wav')
-sfx_bad = simpleaudio.WaveObject.from_wave_file('passbad.wav')
-sfx_dud = simpleaudio.WaveObject.from_wave_file('passdud.wav')
-sfx_reset = simpleaudio.WaveObject.from_wave_file('passreset.wav')
+sounds_path = "sounds"
+enter_sounds_path = os.path.join(sounds_path, "enter")
+char_sounds_path = os.path.join(sounds_path, "char")
+
+sfx_good = simpleaudio.WaveObject.from_wave_file(os.path.join(sounds_path, 'passgood.wav'))
+sfx_bad = simpleaudio.WaveObject.from_wave_file(os.path.join(sounds_path, 'passbad.wav'))
+sfx_dud = simpleaudio.WaveObject.from_wave_file(os.path.join(sounds_path, 'passdud.wav'))
+sfx_reset = simpleaudio.WaveObject.from_wave_file(os.path.join(sounds_path, 'passreset.wav'))
+
+sfx_enter = []
+sfx_char = []
+
 locale.setlocale(locale.LC_ALL, '')
 code = locale.getpreferredencoding()
 
@@ -46,6 +55,14 @@ class TerminalGame:
         self.offset = 0
         self.cursor_x = 7
         self.cursor_y = 6
+
+        if os.path.isdir(enter_sounds_path):
+            for file in os.listdir(enter_sounds_path):
+                sfx_enter.append(simpleaudio.WaveObject.from_wave_file(os.path.join(enter_sounds_path, file)))
+
+        if os.path.isdir(char_sounds_path):
+            for file in os.listdir(char_sounds_path):
+                sfx_char.append(simpleaudio.WaveObject.from_wave_file(os.path.join(char_sounds_path, file)))
 
         stdscr = curses.initscr()
         curses.curs_set(False)
@@ -105,12 +122,16 @@ class TerminalGame:
     def update_cursor(self):
 
         if self.key_pressed == curses.KEY_DOWN:
+            random.choice(sfx_char).play()
             self.cursor_y = self.cursor_y + 1
         elif self.key_pressed == curses.KEY_UP:
+            random.choice(sfx_char).play()
             self.cursor_y = self.cursor_y - 1
         elif self.key_pressed == curses.KEY_RIGHT:
+            random.choice(sfx_char).play()
             self.cursor_x = self.cursor_x + 1
         elif self.key_pressed == curses.KEY_LEFT:
+            random.choice(sfx_char).play()
             self.cursor_x = self.cursor_x - 1
 
         # Constrain the position to selectable areas of the two columns
@@ -292,6 +313,7 @@ class TerminalGame:
                 # Test Selection, pass, incorrect, bonus, or lockout
                 # Also, "scroll" the printed side output up after testing
                 if self.key_pressed == ord('e'):
+                    random.choice(sfx_enter).play()
                     self.terminal_status = self.test_selection()
                     if self.terminal_status == 'Entry denied.':
                         self.scroll_side_text(self.word_to_print)
