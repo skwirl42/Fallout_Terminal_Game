@@ -93,6 +93,10 @@ class TerminalGame:
         # Generate a list of words with one password
         self.word_list = passwordgen.get_list_of_words(self.num_words,
                                                        self.word_length)
+        if len(self.word_list) == 0 or len(self.word_list) < self.num_words:
+            print("Insufficient words of the requested length!")
+            exit(-1)
+
         random.shuffle(self.word_list)
         self.password = random.choice(self.word_list)
         # Keep track of where the password is for later bonus testing

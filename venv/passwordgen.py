@@ -34,9 +34,14 @@ def arrange_words_by_length(unsorted_text):
 
         # Figure out the number of words in each group
         # This dict is naturally ordered, so this works ok through word length of 16
-        for group in word_groups.keys():
-            if (group + 1) in word_groups.keys():
-                word_groups[group][1] = word_groups[group+1][0] - word_groups[group][0]
+        group_keys = sorted(word_groups.keys())
+        #group_keys.sort()
+        #print(str(group_keys))
+        for index, group in enumerate(group_keys):
+            if index < len(group_keys) - 1:
+                word_groups[group][1] = word_groups[group_keys[index + 1]][0] - word_groups[group][0]
+            else:
+                word_groups[group][1] = len(sorted_text) - word_groups[group][0]
 """
     for key in word_groups:
         print('Words of length {0}, '
@@ -52,13 +57,16 @@ def get_list_of_words(num_words, length_of_words):
 
     arrange_words_by_length(clean_text)
     random_list = []
-    word_block_index = word_groups[length_of_words][0]
-    word_block_size = word_groups[length_of_words][1]
-    rand_block_selection = random.randint(word_block_index,
-                                          (word_block_index + word_block_size - num_words))
 
-    for word in range(rand_block_selection, rand_block_selection+num_words):
-        random_list.append(sorted_text[word])
+    if length_of_words in word_groups.keys():
+
+        word_block_index = word_groups[length_of_words][0]
+        word_block_size = word_groups[length_of_words][1]
+        rand_block_selection = random.randint(word_block_index,
+                                              (word_block_index + word_block_size - num_words))
+
+        for word in range(rand_block_selection, rand_block_selection+num_words):
+            random_list.append(sorted_text[word])
 
     return random_list
 
