@@ -124,19 +124,22 @@ class TerminalGame:
                 self.offset = self.selectable_size - self.word_length
 
     def update_cursor(self):
-
+        has_pressed = False
         if self.key_pressed == curses.KEY_DOWN:
-            random.choice(sfx_char).play()
+            has_pressed = True
             self.cursor_y = self.cursor_y + 1
         elif self.key_pressed == curses.KEY_UP:
-            random.choice(sfx_char).play()
+            has_pressed = True
             self.cursor_y = self.cursor_y - 1
         elif self.key_pressed == curses.KEY_RIGHT:
-            random.choice(sfx_char).play()
+            has_pressed = True
             self.cursor_x = self.cursor_x + 1
         elif self.key_pressed == curses.KEY_LEFT:
-            random.choice(sfx_char).play()
+            has_pressed = True
             self.cursor_x = self.cursor_x - 1
+
+        if has_pressed:
+            random.choice(sfx_char).play()
 
         # Constrain the position to selectable areas of the two columns
         if self.cursor_y < 6:
@@ -328,7 +331,7 @@ class TerminalGame:
                         self.scroll_side_text(self.word_to_print)
                         self.scroll_side_text(self.terminal_status)
                         self.scroll_side_text('Likeness='+str(self.likeness))
-                        self.word_to_print = ''
+                        self.word_to_print = '.'
                     elif self.terminal_status == 'TERMINAL LOCKED' or \
                             self.terminal_status == 'Password Accepted.':
                         stdscr.nodelay(True)
