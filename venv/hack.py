@@ -287,7 +287,6 @@ class TerminalGame:
         if self.entry_denied:
             sfx_bad.play()
             if self.attempts > 1:
-                self.remove_word(self.highlightable_indices[0])
                 self.attempts = self.attempts - 1
                 return 'Entry denied.'
             else:
@@ -331,7 +330,6 @@ class TerminalGame:
                         self.scroll_side_text(self.word_to_print)
                         self.scroll_side_text(self.terminal_status)
                         self.scroll_side_text('Likeness='+str(self.likeness))
-                        self.word_to_print = '.'
                     elif self.terminal_status == 'TERMINAL LOCKED' or \
                             self.terminal_status == 'Password Accepted.':
                         stdscr.nodelay(True)
