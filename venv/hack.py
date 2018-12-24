@@ -8,6 +8,7 @@ import random
 import string
 import simpleaudio
 import os
+import sys
 
 sounds_path = "sounds"
 enter_sounds_path = os.path.join(sounds_path, "enter")
@@ -26,7 +27,7 @@ code = locale.getpreferredencoding()
 
 class TerminalGame:
 
-    def __init__(self):
+    def __init__(self, word_length):
 
         self.logged_in = False
         self.locked_out = False
@@ -36,8 +37,9 @@ class TerminalGame:
         self.test_result = ''
         self.address = 0
         self.rows = 16
-        self.word_length = 5 # Password length from 4 to 14
+        self.word_length = word_length # Password length from 4 to 14
         self.num_words = 12
+        self.difficulty = 1
         self.selectable_size = 384 # 16 rows of 12 char columns
         self.side_text_size = 225 # 15 rows of 15 char columns
         self.max_spacing = 0
@@ -91,14 +93,15 @@ class TerminalGame:
             self.selectable_text.append(random.choice(junk_chars))
 
         # Generate a list of words with one password
-        self.word_list = passwordgen.get_list_of_words(self.num_words,
-                                                       self.word_length)
+        self.password, self.word_list = passwordgen.get_list_of_words(self.num_words,
+                                                                      self.word_length,
+                                                                      self.difficulty)
         if len(self.word_list) == 0 or len(self.word_list) < self.num_words:
             print("Insufficient words of the requested length!")
             exit(-1)
 
         random.shuffle(self.word_list)
-        self.password = random.choice(self.word_list)
+
         # Keep track of where the password is for later bonus testing
         # It needs to be randomly placed, but we can't accidentally delete it
         # if a "dud replaced" bonus event occurs
@@ -403,8 +406,11 @@ class TerminalGame:
         # Cleanly handle setup and close of curses within the shell
         curses.wrapper(self.draw_terminal)
 
+word_length = 5
+if len(sys.argv) > 1:
+    word_length = int(sys.argv[1])
 
-terminal = TerminalGame()
+terminal = TerminalGame(word_length)
 
 if __name__ == "__main__":
 
