@@ -64,7 +64,7 @@ def get_available_similarities(similarities_table):
     key_list = list(similarities_table.keys())[0:-1]
     return list(filter(lambda x: len(similarities_table[x]) > 0, key_list))
 
-def get_list_of_words(num_words, length_of_words, difficulty):
+def get_list_of_words(num_words, length_of_words, difficulty=1):
     # For the game it's best that words have a length between 4 and 12,
     # but I'm leaving the option for any choice.
     # Words of length 15 or more are impractical though
