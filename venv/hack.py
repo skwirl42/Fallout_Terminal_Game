@@ -347,7 +347,7 @@ class TerminalGame:
 
                 # Update attempts remaining after testing
                 for attempt in range(self.attempts):
-                    stdscr.addstr(u' \u2588'.encode(code))  # utf-8 FULL BLOCK █
+                    stdscr.addstr(' █')
 
                 # Show the "memory" dump
                 # With the selectable text wrapping in columns
