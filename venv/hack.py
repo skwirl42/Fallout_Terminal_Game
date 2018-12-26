@@ -225,10 +225,18 @@ class TerminalGame:
             elif self.selectable_text[self.selection_index] == '<':
                 self.closing_char = '>'
             # Columns are 12 chars wide, so search up to that many spaces away within selectable text
+            cursor_pos = self.get_cursor_pos_from_index(self.selection_index)
             for len_offset, char in enumerate(range(13)):
                 # Don't look past the end of the list
                 if self.selection_index + len_offset > 383:
                     break
+                # Break out if we've hit a word
+                if self.selectable_text[self.selection_index + len_offset].isalpha():
+                   break
+                # Don't try to break up over a line
+                current_cursor_pos = self.get_cursor_pos_from_index(self.selection_index + len_offset)
+                if current_cursor_pos[0] != cursor_pos[0]:
+                   break
                 # Record the indices of the enclosing brackets
                 if  self.selectable_text[self.selection_index + len_offset] == self.closing_char:
                     self.end_of_word = self.selection_index + len_offset + 1
